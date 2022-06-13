@@ -86,7 +86,7 @@ namespace MultiThreading.Task3.MatrixMultiplier.Tests
             new MatricesMultiplier().Multiply(m1, m2);
             sp.Stop();
             var syncTime = sp.ElapsedMilliseconds;
-            sp.Restart();
+            sp.Reset();
             sp.Start();
             new MatricesMultiplierParallel().Multiply(m1, m2);
             sp.Stop();

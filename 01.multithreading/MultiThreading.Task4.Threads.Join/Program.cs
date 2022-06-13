@@ -17,6 +17,7 @@ namespace MultiThreading.Task4.Threads.Join
 {
     class Program
     {
+        static Semaphore sem = new Semaphore(1, 1);
         static void Main(string[] args)
         {
             Console.WriteLine("4.	Write a program which recursively creates 10 threads.");
@@ -28,37 +29,38 @@ namespace MultiThreading.Task4.Threads.Join
 
             Console.WriteLine();
 
-            RecursionWithThreads(10, 20);
+            ChangeStateWithThread(10);
+            ChangeStateWithThreadPool(10);
 
             Console.ReadLine();
         }
 
-        static void RecursionWithThreads(int n, int state)
-        {
-            if (n != 0)
-            {
-                var t = new Thread(() =>
-                {
-                    state = ChangeState(state);
-                });
-                t.Start();
-                t.Join();
-                RecursionWithThreads(--n, state);
-            }
-        }
-        static void RecursionWithThreadPool(int n, int state)
-        { //????????????
-            if (n != 0)
-            {
-            }
-        }
-
-
-        static int ChangeState(int state)
+        static void ChangeStateWithThread(int state)
         {
             state--;
             Console.WriteLine(state);
-            return state;
+
+            if (state != 0)
+            {
+                var t = new Thread(() =>
+                {
+                    ChangeStateWithThread(state);
+                });
+                t.Start();
+                t.Join();
+            }
+        }
+        static void ChangeStateWithThreadPool(int state)
+        {
+            state--;
+            Console.WriteLine(state);
+
+            if (state != 0)
+            {
+                sem.WaitOne();
+                ThreadPool.QueueUserWorkItem((a) => ChangeStateWithThreadPool(state));
+                sem.Release();
+            }
         }
     }
 }

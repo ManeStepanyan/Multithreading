@@ -55,13 +55,18 @@ namespace MultiThreading.Task6.Continuation
                     }
                 case ("c"):
                     {
-                        t1 = new Task(() => throw new NotImplementedException());
+                        t1 = new Task(() =>
+                        {
+                            Console.WriteLine(Thread.CurrentThread.ManagedThreadId);
+                            throw new NotImplementedException();
+                        });
                         t1.ContinueWith(t =>
                         {
                             if (t.Status == TaskStatus.Faulted)
                             {
                                 Console.WriteLine($"Task 1 failed with exception: { t.Exception.GetBaseException().Message}");
                                 Console.WriteLine("Task 2 is running");
+                                Console.WriteLine(Thread.CurrentThread.ManagedThreadId);
                             }
                         }, TaskContinuationOptions.ExecuteSynchronously);
                         t1.Start();

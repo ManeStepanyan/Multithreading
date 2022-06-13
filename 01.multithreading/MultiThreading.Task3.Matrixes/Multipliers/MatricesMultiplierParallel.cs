@@ -24,6 +24,11 @@ namespace MultiThreading.Task3.MatrixMultiplier.Multipliers
         public long CalculateSum(IMatrix m1, IMatrix m2, long i, long j)
         {
             long sum = 0;
+            //Parallel.For(0, m1.ColCount, (k) =>
+            //{
+            //    sum += m1.GetElement(i, k) * m2.GetElement(k, j);
+            //});
+
             for (byte k = 0; k < m1.ColCount; k++)
             {
                 sum += m1.GetElement(i, k) * m2.GetElement(k, j);
